@@ -159,8 +159,8 @@ class ListingPage(BasePage):
         if not max_pointer_set:
             self.move_pointer_to_price_value(self.price_slider_max_pointer, max_price)
 
-        self.assert_price_pointer_values(min_price, max_price)
-        self.page.wait_for_load_state("networkidle")
+        with self.page.expect_response(lambda response: f"between=price,{min_price},{max_price}" in response.url):
+            self.assert_price_pointer_values(min_price, max_price)
 
     def assert_price_pointer_values(
         self, min_pointer_value: int, max_pointer_value: int
